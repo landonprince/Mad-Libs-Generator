@@ -19,10 +19,10 @@ public class WordBank {
      * Fills the word bank with empty lists for different word types (nouns, verbs, adjectives, adverbs).
      */
     protected void fillBank() {
-        words.add(new ArrayList<>());
-        words.add(new ArrayList<>());
-        words.add(new ArrayList<>());
-        words.add(new ArrayList<>());
+        words.add(new ArrayList<>()); // nouns
+        words.add(new ArrayList<>()); // verbs
+        words.add(new ArrayList<>()); // adjectives
+        words.add(new ArrayList<>()); // adverbs
     }
     /**
      * Retrieves the list of nouns from the word bank.

@@ -83,7 +83,4 @@ public class WesternWordBank extends WordBank {
                 "warmly", "wearily", "wildly", "wisely", "yearningly", "zealously"
         ));
     }
-
-
-
 }

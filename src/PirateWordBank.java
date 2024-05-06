@@ -80,5 +80,4 @@ public class PirateWordBank extends WordBank {
                 "wearily", "wildly", "wisely", "yearningly", "zealously"
         ));
     }
-
 }

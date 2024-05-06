@@ -10,8 +10,8 @@ public class MainLoop {
      * @param args Command-line arguments (not used).
      */
     public static void main(String[] args) {
-        System.out.print("-- Mad Libs (Java Edition) --");
-        System.out.println(" By: Landon Prince");
+        System.out.println("-- Mad Libs (Java Edition) --");
+        System.out.println("     By: Landon Prince\n");
         startLauncher();
     }
     /**
@@ -21,17 +21,18 @@ public class MainLoop {
     private static void startLauncher() {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
-                System.out.println("Enter 'play' to begin or 'quit' to close the game.");
+                System.out.println("Enter '1' or '2'");
+                System.out.println("1. Play\n2. Quit");
                 String choice = scanner.nextLine();
-                if (choice.equalsIgnoreCase("play")) {
-                    loadingText(1, "Starting game");
+                if (choice.equalsIgnoreCase("1")) {
+                    loadingText(1, "\nStarting game");
                     startGame(scanner);
                     break;
-                } else if (choice.equalsIgnoreCase("quit")) {
-                    loadingText(1, "Closing game");
+                } else if (choice.equalsIgnoreCase("2")) {
+                    loadingText(1, "\nClosing game");
                     break;
                 } else {
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\nInvalid choice. Please try again.\n");
                 }
             }
         }
@@ -43,19 +44,23 @@ public class MainLoop {
      */
     private static void startGame(Scanner scanner) {
         System.out.println("Welcome to Mad Libs!\n\nHere's how it works:");
-        System.out.println("You'll provide the words, and I'll create a fun story with them!\n");
+        System.out.println("""
+                I'll generate a story template based on your specifications,
+                and you'll fill in the blank spaces to make a wacky tale!
+                """);
         while (true) {
-            System.out.println("Are you ready to start a round? Enter 'yes' or 'no'.");
+            System.out.println("Are you ready to make a Mad Libs?");
+            System.out.println("1. I'm ready!\n2. Go back");
             String choice = scanner.nextLine();
-            if (choice.equalsIgnoreCase("yes")) {
+            if (choice.equalsIgnoreCase("1")) {
                 startRound(scanner);
                 break;
-            } else if (choice.equalsIgnoreCase("no")) {
-                System.out.println("Okay, maybe next time!");
+            } else if (choice.equalsIgnoreCase("2")) {
+                System.out.println("\nOkay, maybe next time!\n");
                 startLauncher();
                 break;
             } else {
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println("\nInvalid choice. Please try again.\n");
             }
         }
     }
@@ -65,42 +70,79 @@ public class MainLoop {
      * @param scanner Scanner object for user input.
      */
     private static void startRound(Scanner scanner) {
-        int wordCount = getNumWords(scanner);
+        int sentenceCount = getNumSentences(scanner);
+        int blankCount = getNumBlanks(scanner);
         String theme = getTheme(scanner);
-        System.out.println("Fantastic choice!");
+        System.out.print("\nNice choices! ");
         System.out.println("I will now create a " + theme.toLowerCase() + " themed story with " +
-                wordCount + " blanks.\n");
+                sentenceCount + " sentences.\n");
         loadingText(3, "Generating story template");
-        StoryFactory storyFactory = new StoryFactory(theme, wordCount);
+        StoryFactory storyFactory = new StoryFactory(theme, sentenceCount, blankCount);
         List<String> story = storyFactory.generateStory();
+        int lineLength = 0;
+        int maxLength = 80;
         for (String s : story) {
+            if (lineLength + s.length() > maxLength) {
+                System.out.println();
+                lineLength = 0;
+            }
             System.out.print(s);
+            lineLength += s.length();
         }
     }
     /**
-     * Prompts the player to enter the number of words to provide for the story.
+     * Prompts the player to enter the number of sentences for the story.
      * Validates the input to ensure it's an integer between 1 and 20.
      * @param scanner Scanner object for user input.
-     * @return The number of words provided by the player.
+     * @return The number of sentences in story.
      */
-    private static int getNumWords(Scanner scanner) {
-        int wordCount;
-        System.out.print("Splendid! ");
+    private static int getNumSentences(Scanner scanner) {
+        int sentenceCount;
+        System.out.println("\nFantastic! To begin, I must ask some questions...\n");
+        System.out.print("Firstly, ");
+
         while (true) {
-            System.out.println("How many words would you like to provide? (1-20)");
+            System.out.println("how long would you like the story to be?");
+            System.out.print("Enter number of sentences (1-20): ");
             String input = scanner.nextLine();
             if (isInteger(input)) {
-                wordCount = Integer.parseInt(input);
-                if (wordCount > 20 || wordCount < 1) {
-                    System.out.println("Must be between 1 and 20. Please try again.");
+                sentenceCount = Integer.parseInt(input);
+                if (sentenceCount > 20 || sentenceCount < 1) {
+                    System.out.println("\nMust be between 1 and 20. Please try again.\n");
                 } else {
                     break;
                 }
             } else {
-                System.out.println("Must be an integer between 1 and 20. Please try again.");
+                System.out.println("\nMust be an integer between 1 and 20. Please try again.\n");
             }
         }
-        return wordCount;
+        return sentenceCount;
+    }
+    /**
+     * Prompts the player to enter the number of words to fill in the story.
+     * Validates the input to ensure it's an integer between 1 and 10.
+     * @param scanner Scanner object for user input.
+     * @return The number of blank spaces in story.
+     */
+    private static int getNumBlanks(Scanner scanner) {
+        int blankCount;
+        System.out.print("\nGreat! Next, ");
+        while (true) {
+            System.out.println("how many words would you like to fill in?");
+            System.out.print("Enter number of blank spaces (1-10): ");
+            String input = scanner.nextLine();
+            if (isInteger(input)) {
+                blankCount = Integer.parseInt(input);
+                if (blankCount > 10 || blankCount < 1) {
+                    System.out.println("\nMust be between 1 and 10. Please try again.\n");
+                } else {
+                    break;
+                }
+            } else {
+                System.out.println("\nMust be an integer between 1 and 10. Please try again.\n");
+            }
+        }
+        return blankCount;
     }
     /**
      * Prompts the player to choose a theme for the story.
@@ -110,25 +152,28 @@ public class MainLoop {
      */
     private static String getTheme(Scanner scanner) {
         String theme;
-        System.out.print("Perfect! Next, ");
+        System.out.print("\nPerfect! Lastly, ");
+        label:
         while (true) {
-            System.out.println("Which theme would you like for the story?");
+            System.out.println("Which theme would you like the story to be?");
             System.out.println("1. Space\n2. Western\n3. Pirate\n4. All");
             String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("Space") || input.equals("1")) {
-                theme = "space";
-                break;
-            } else if (input.equalsIgnoreCase("Western") || input.equals("2")) {
-                theme = "western";
-                break;
-            } else if (input.equalsIgnoreCase("Pirate") || input.equals("3")) {
-                theme = "pirate";
-                break;
-            } else if (input.equalsIgnoreCase("All") || input.equals("4")) {
-                theme = "all";
-                break;
-            } else {
-                System.out.println("Theme not found. Please try again.");
+            switch (input) {
+                case "1":
+                    theme = "space";
+                    break label;
+                case "2":
+                    theme = "western";
+                    break label;
+                case "3":
+                    theme = "pirate";
+                    break label;
+                case "4":
+                    theme = "all";
+                    break label;
+                default:
+                    System.out.println("\nTheme not found. Please try again.\n");
+                    break;
             }
         }
         return theme;

@@ -49,7 +49,7 @@ public class MainLoop {
                 and you'll fill in the blank spaces to make a wacky tale!
                 """);
         while (true) {
-            System.out.println("Are you ready to make a Mad Libs?");
+            System.out.println("Are you ready to make a Mad Lib?");
             System.out.println("1. I'm ready!\n2. Go back");
             String choice = scanner.nextLine();
             if (choice.equalsIgnoreCase("1")) {
@@ -71,24 +71,15 @@ public class MainLoop {
      */
     private static void startRound(Scanner scanner) {
         int sentenceCount = getNumSentences(scanner);
-        int blankCount = getNumBlanks(scanner);
+        double blankFrequency = getBlankFrequency(scanner);
         String theme = getTheme(scanner);
         System.out.print("\nNice choices! ");
         System.out.println("I will now create a " + theme.toLowerCase() + " themed story with " +
                 sentenceCount + " sentences.\n");
         loadingText(3, "Generating story template");
-        StoryFactory storyFactory = new StoryFactory(theme, sentenceCount, blankCount);
+        StoryFactory storyFactory = new StoryFactory(theme, sentenceCount, blankFrequency);
         List<String> story = storyFactory.generateStory();
-        int lineLength = 0;
-        int maxLength = 80;
-        for (String s : story) {
-            if (lineLength + s.length() > maxLength) {
-                System.out.println();
-                lineLength = 0;
-            }
-            System.out.print(s);
-            lineLength += s.length();
-        }
+        storyFactory.printStory(story);
     }
     /**
      * Prompts the player to enter the number of sentences for the story.
@@ -102,47 +93,56 @@ public class MainLoop {
         System.out.print("Firstly, ");
 
         while (true) {
-            System.out.println("how long would you like the story to be?");
-            System.out.print("Enter number of sentences (1-20): ");
+            System.out.println("How long would you like the story to be?");
+            System.out.print("Enter number of sentences (1-50): ");
             String input = scanner.nextLine();
             if (isInteger(input)) {
                 sentenceCount = Integer.parseInt(input);
-                if (sentenceCount > 20 || sentenceCount < 1) {
-                    System.out.println("\nMust be between 1 and 20. Please try again.\n");
+                if (sentenceCount > 50 || sentenceCount < 1) {
+                    System.out.println("\nMust be between 1 and 50. Please try again.\n");
                 } else {
                     break;
                 }
             } else {
-                System.out.println("\nMust be an integer between 1 and 20. Please try again.\n");
+                System.out.println("\nMust be an integer between 1 and 50. Please try again.\n");
             }
         }
         return sentenceCount;
     }
     /**
-     * Prompts the player to enter the number of words to fill in the story.
-     * Validates the input to ensure it's an integer between 1 and 10.
+     * Prompts the player to enter the frequency of blank spaces in the story.
+     * Validates the input and sets the blank frequency accordingly.
      * @param scanner Scanner object for user input.
      * @return The number of blank spaces in story.
      */
-    private static int getNumBlanks(Scanner scanner) {
-        int blankCount;
+    private static double getBlankFrequency(Scanner scanner) {
+        double blankFrequency;
         System.out.print("\nGreat! Next, ");
         while (true) {
-            System.out.println("how many words would you like to fill in?");
-            System.out.print("Enter number of blank spaces (1-10): ");
-            String input = scanner.nextLine();
-            if (isInteger(input)) {
-                blankCount = Integer.parseInt(input);
-                if (blankCount > 10 || blankCount < 1) {
-                    System.out.println("\nMust be between 1 and 10. Please try again.\n");
-                } else {
-                    break;
-                }
+            System.out.println("How many blank spaces would you like in the story?");
+            System.out.println("""
+                    1. Many blank spaces
+                    2. Some blank spaces
+                    3. Few blank spaces
+                    4. No blank spaces""");
+            String choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("1")) {
+                blankFrequency = .5;
+                break;
+            } else if (choice.equalsIgnoreCase("2")) {
+                blankFrequency = .25;
+                break;
+            } else if (choice.equalsIgnoreCase("3")) {
+                blankFrequency = .1;
+                break;
+            } else if (choice.equalsIgnoreCase("4")) {
+                blankFrequency = 0;
+                break;
             } else {
-                System.out.println("\nMust be an integer between 1 and 10. Please try again.\n");
+                System.out.println("\nInvalid choice. Please try again.\n");
             }
         }
-        return blankCount;
+        return blankFrequency;
     }
     /**
      * Prompts the player to choose a theme for the story.
@@ -156,7 +156,11 @@ public class MainLoop {
         label:
         while (true) {
             System.out.println("Which theme would you like the story to be?");
-            System.out.println("1. Space\n2. Western\n3. Pirate\n4. All");
+            System.out.println("""
+                    1. Space
+                    2. Western
+                    3. Pirate
+                    4. All""");
             String input = scanner.nextLine();
             switch (input) {
                 case "1":

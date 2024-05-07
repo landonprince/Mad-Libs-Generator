@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.List;
+import java.util.Arrays;
+
 /**
  * PirateWordBank class represents a bank of words specific to the pirate theme used in Mad Libs stories.
  * It extends the WordBank class and fills the word bank with pirate-themed words.

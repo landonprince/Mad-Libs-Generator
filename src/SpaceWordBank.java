@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.List;
+import java.util.Arrays;
+
 /**
  * SpaceWordBank class represents a bank of words specific to the space theme used in Mad Libs stories.
  * It extends the WordBank class and fills the word bank with space-themed words.
@@ -11,6 +13,7 @@ public class SpaceWordBank extends WordBank {
     public SpaceWordBank() {
         fillBank();
     }
+
     /**
      * Fills the space-themed word bank with nouns, verbs, adjectives, and adverbs related to space.
      */

@@ -1,6 +1,12 @@
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Collections;
+
 /**
- * SentenceFactory class generates sentences based on provided templates and word bank.
+ * SentenceFactory class generates sentences based on provided theme
+ * and blank frequency.
  */
 public class SentenceFactory {
     private final String theme;
@@ -20,6 +26,7 @@ public class SentenceFactory {
         random.setSeed(seed);
         buildTemplates();
     }
+
     /**
      * Generates a sentence based on a provided word bank.
      * @param wordBank The word bank containing words for the sentence.
@@ -72,6 +79,7 @@ public class SentenceFactory {
         }
         return sentence;
     }
+
     /**
      * Builds sentence templates.
      */

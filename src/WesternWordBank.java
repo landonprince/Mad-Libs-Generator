@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.List;
+import java.util.Arrays;
+
 /**
  * WesternWordBank class represents a bank of words specific to the western theme used in Mad Libs stories.
  * It extends the WordBank class and fills the word bank with western-themed words.
@@ -11,6 +13,7 @@ public class WesternWordBank extends WordBank {
     public WesternWordBank() {
         fillBank();
     }
+
     /**
      * Fills the western-themed word bank with nouns, verbs, adjectives, and adverbs related to western.
      */

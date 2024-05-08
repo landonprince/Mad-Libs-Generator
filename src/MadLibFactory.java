@@ -1,3 +1,6 @@
+// By: Landon Prince (5/4/2024)
+
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,9 +16,9 @@ public class MadLibFactory {
 
     /**
      * Constructor for MadLibFactory class.
-     * Initializes the theme and sentence count, and creates a SentenceFactory instance.
-     * @param theme          The theme for the Mad Lib.
-     * @param sentenceCount  The number of sentences in the Mad Lib.
+     * Initializes the parameters, and creates a SentenceFactory instance.
+     * @param theme The theme for the Mad Lib.
+     * @param sentenceCount The number of sentences in the Mad Lib.
      * @param blankFrequency The amount of blank spaces in the Mad Lib
      */
     protected MadLibFactory(String theme, int sentenceCount, double blankFrequency) {
@@ -27,7 +30,6 @@ public class MadLibFactory {
 
     /**
      * Generates a Mad Lib based on the provided theme and sentence count.
-     *
      * @return A list of strings representing the generated Mad Lib.
      */
     protected List<String> generateMadLib() {
@@ -54,9 +56,18 @@ public class MadLibFactory {
         }
         return madLib;
     }
+
+    /**
+     * Returns a list of the blank space word types from the Mad Lib template
+     * @return A list of word types (noun/ver/adjective/adverb).
+     */
     protected List<String> getWordTypes() {
         return sentenceFactory.getWordTypes();
     }
+
+    /**
+     * Prints the filled or unfilled Mad Lib to console
+     */
     protected void printMadLib(List<String> madLib) {
         int borderLength = maxSentenceLength + 4;
         System.out.println();
@@ -79,6 +90,9 @@ public class MadLibFactory {
         System.out.println(border + "\n");
     }
 
+    /**
+     * Prints a filled or unfilled Mad Lib to console
+     */
     protected List<String> fillBlanks(List<String> madLib, List<String> responses) {
         int responseIndex = 0;
         for (int i = 0; i < madLib.size(); i++) {

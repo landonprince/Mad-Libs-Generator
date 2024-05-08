@@ -1,3 +1,5 @@
+// By: Landon Prince (5/4/2024)
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +19,9 @@ public class SentenceFactory {
 
     /**
      * Constructor for SentenceFactory class.
-     * Initializes the theme and builds templates.
+     * Initializes the theme/blank frequency and builds templates.
      * @param theme The theme for the sentences.
+     * @param blankFrequency The blank frequency for the sentences
      */
     protected SentenceFactory(String theme, double blankFrequency) {
         this.theme = theme;
@@ -92,6 +95,7 @@ public class SentenceFactory {
 
     /**
      * Builds sentence templates.
+     * $ = noun, # = verb, @ = adjective, % = adverb.
      */
     protected void buildTemplates() {
         templates.addAll(Arrays.asList(

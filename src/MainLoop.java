@@ -1,10 +1,12 @@
+// By: Landon Prince (5/4/2024)
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 
 /**
- * MainLoop class provides the main execution logic for a Mad Libs game in Java.
- * It includes methods for starting the game, handling user input, and generating stories.
+ * MainLoop class provides the main execution logic for a Mad Libs game.
+ * It includes methods for facilitating a full game of Mad Libs.
  */
 public class MainLoop {
     private static final int MAX_SENTENCES = 25;
@@ -82,7 +84,7 @@ public class MainLoop {
 
     /**
      * Starts a new round of the game, prompting the player to choose the number
-     * of words and the theme. Then generates and displays the Mad Lib.
+     * of sentences, blank frequency, and theme. Then generates and displays the Mad Lib.
      * @param scanner Scanner object for user input.
      */
     private static void startRound(Scanner scanner) {
@@ -157,7 +159,7 @@ public class MainLoop {
     }
 
     /**
-     * Fills the blank spaces in the Mad Lib with user input.
+     * Gathers word responses from user used to fill blanks
      * @param scanner Scanner object for user input.
      */
     private static List<String> getResponses(Scanner scanner) {
@@ -184,7 +186,7 @@ public class MainLoop {
 
     /**
      * Prompts the player to enter the number of sentences for the Mad Lib.
-     * Validates the input to ensure it's an integer between 1 and 20.
+     * Validates the input to ensure it's an integer between 1 and 25.
      * @param scanner Scanner object for user input.
      * @return The number of sentences in the Mad Lib.
      */

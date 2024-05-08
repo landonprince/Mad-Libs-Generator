@@ -1,9 +1,11 @@
+// By: Landon Prince (5/4/2024)
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * WordBank class represents a bank of words used in Mad Libs stories.
+ * WordBank class represents a bank of words used in Mad Libs.
  * It provides methods to retrieve random words and word lists.
  */
 public class WordBank {

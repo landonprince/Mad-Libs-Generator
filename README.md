@@ -15,9 +15,9 @@ Players can choose the number of sentences, frequency of blank spaces, and the o
 |                                                           |
 | As it shreaks [adverb], I prepare to attack.              |
 |                                                           |
-| it took the privateer and began to destroy the sails.     |
+| It took the privateer and began to destroy the sails.     |
 |                                                           |
-| After [noun] swam quickly, it [verb] the nautical.        |
+| After [noun] swam quickly, it [verb] the ship.            |
 +-----------------------------------------------------------+
 
 Pirate themed Mad Lib with 5 sentences and some blank spaces
@@ -41,3 +41,4 @@ Pirate themed Mad Lib with 5 sentences and some blank spaces
 - Inheritance
 - Dynamic binding & polymorphism
 - Inversion of control
+- Modularity & flexibility

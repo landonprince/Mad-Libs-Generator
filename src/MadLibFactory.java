@@ -1,4 +1,4 @@
-// By: Landon Prince (5/4/2024 - 5/8/2024)
+// By: Landon Prince (5/4/2024)
 
 import java.util.List;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class MadLibFactory {
     }
 
     /**
-     * Returns a list of the blank space word types from the Mad Lib template
+     * Returns a list of the blank space word types from the Mad Lib template.
      * @return A list of word types (noun/ver/adjective/adverb).
      */
     protected List<String> getWordTypes() {
@@ -65,7 +65,8 @@ public class MadLibFactory {
     }
 
     /**
-     * Prints the filled or unfilled Mad Lib to console
+     * Prints the filled or unfilled Mad Lib to console.
+     * @param madLib List of sentences representing Mad Lib.
      */
     protected void printMadLib(List<String> madLib) {
         int borderLength = maxSentenceLength + 4;
@@ -91,6 +92,9 @@ public class MadLibFactory {
 
     /**
      * Prints a filled or unfilled Mad Lib to console
+     * @param madLib List of sentences representing Mad Lib.
+     * @param responses List of user response words
+     * @return Updated Mad Lib with blank spaces filled with user responses.
      */
     protected List<String> fillBlanks(List<String> madLib, List<String> responses) {
         int responseIndex = 0;

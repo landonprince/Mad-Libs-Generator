@@ -7,16 +7,16 @@ import java.util.Random;
  * It provides methods to retrieve random words and word lists.
  */
 public class WordBank {
-    protected List<List<String>> words = new ArrayList<>();
-    protected Random random = new Random();
+    private final List<List<String>> WORDS = new ArrayList<>();
+    private final Random RANDOM = new Random();
 
     /**
      * Constructor for WordBank class.
      * Initializes the word bank and sets the seed for randomization.
      */
-    public WordBank() {
+    protected WordBank() {
         long seed = System.currentTimeMillis();
-        random.setSeed(seed);
+        RANDOM.setSeed(seed);
         fillBank();
     }
 
@@ -25,49 +25,49 @@ public class WordBank {
      * (nouns, verbs, adjectives, adverbs).
      */
     protected void fillBank() {
-        words.add(new ArrayList<>()); // nouns
-        words.add(new ArrayList<>()); // verbs
-        words.add(new ArrayList<>()); // adjectives
-        words.add(new ArrayList<>()); // adverbs
+        WORDS.add(new ArrayList<>()); // nouns
+        WORDS.add(new ArrayList<>()); // verbs
+        WORDS.add(new ArrayList<>()); // adjectives
+        WORDS.add(new ArrayList<>()); // adverbs
     }
 
     /**
      * Retrieves the list of nouns from the word bank.
      * @return List of nouns.
      */
-    public List<String> getNouns() {
-        return words.get(0);
+    protected List<String> getNouns() {
+        return WORDS.get(0);
     }
 
     /**
      * Retrieves the list of verbs from the word bank.
      * @return List of verbs.
      */
-    public List<String> getVerbs() {
-        return words.get(1);
+    protected List<String> getVerbs() {
+        return WORDS.get(1);
     }
 
     /**
      * Retrieves the list of adjectives from the word bank.
      * @return List of adjectives.
      */
-    public List<String> getAdjectives() {
-        return words.get(2);
+    protected List<String> getAdjectives() {
+        return WORDS.get(2);
     }
 
     /**
      * Retrieves the list of adverbs from the word bank.
      * @return List of adverbs.
      */
-    public List<String> getAdverbs() {
-        return words.get(3);
+    protected List<String> getAdverbs() {
+        return WORDS.get(3);
     }
 
     /**
      * Retrieves a random noun from the word bank.
      * @return Random noun.
      */
-    public String getRandomNoun() {
+    protected String getRandomNoun() {
         List<String> nouns = getNouns();
         return getRandomElement(nouns);
     }
@@ -76,7 +76,7 @@ public class WordBank {
      * Retrieves a random verb from the word bank.
      * @return Random verb.
      */
-    public String getRandomVerb() {
+    protected String getRandomVerb() {
         List<String> verbs = getVerbs();
         return getRandomElement(verbs);
     }
@@ -85,7 +85,7 @@ public class WordBank {
      * Retrieves a random adjective from the word bank.
      * @return Random adjective.
      */
-    public String getRandomAdjective() {
+    protected String getRandomAdjective() {
         List<String> adjectives = getAdjectives();
         return getRandomElement(adjectives);
     }
@@ -94,7 +94,7 @@ public class WordBank {
      * Retrieves a random adverb from the word bank.
      * @return Random adverb.
      */
-    public String getRandomAdverb() {
+    protected String getRandomAdverb() {
         List<String> adverbs = getAdverbs();
         return getRandomElement(adverbs);
     }
@@ -103,8 +103,8 @@ public class WordBank {
      * Retrieves a random noun from any theme-specific word bank.
      * @return Random noun from any theme.
      */
-    public String getRandomNounAll() {
-        int bankIndex = random.nextInt(3);
+    protected String getRandomNounFromAny() {
+        int bankIndex = RANDOM.nextInt(3);
         List<String> nouns;
         if (bankIndex == 0) {
             nouns = new SpaceWordBank().getNouns();
@@ -120,8 +120,8 @@ public class WordBank {
      * Retrieves a random verb from any theme-specific word bank.
      * @return Random verb from any theme.
      */
-    public String getRandomVerbAll() {
-        int bankIndex = random.nextInt(3);
+    protected String getRandomVerbFromAny() {
+        int bankIndex = RANDOM.nextInt(3);
         List<String> verbs;
         if (bankIndex == 0) {
             verbs = new SpaceWordBank().getVerbs();
@@ -137,8 +137,8 @@ public class WordBank {
      * Retrieves a random adjective from any theme-specific word bank.
      * @return Random adjective from any theme.
      */
-    public String getRandomAdjectiveAll() {
-        int bankIndex = random.nextInt(3);
+    protected String getRandomAdjectiveFromAny() {
+        int bankIndex = RANDOM.nextInt(3);
         List<String> adjectives;
         if (bankIndex == 0) {
             adjectives = new SpaceWordBank().getAdjectives();
@@ -154,8 +154,8 @@ public class WordBank {
      * Retrieves a random adverb from any theme-specific word bank.
      * @return Random adverb from any theme.
      */
-    public String getRandomAdverbAll() {
-        int bankIndex = random.nextInt(3);
+    protected String getRandomAdverbFromAny() {
+        int bankIndex = RANDOM.nextInt(3);
         List<String> adverbs;
         if (bankIndex == 0) {
             adverbs = new SpaceWordBank().getAdverbs();
@@ -172,11 +172,11 @@ public class WordBank {
      * @param list The list from which to retrieve the random element.
      * @return Random element from the list.
      */
-    private String getRandomElement(List<String> list) {
+    protected String getRandomElement(List<String> list) {
         if (list.isEmpty()) {
             return null;
         }
-        int randomIndex = random.nextInt(list.size());
+        int randomIndex = RANDOM.nextInt(list.size());
         return list.get(randomIndex);
     }
 }

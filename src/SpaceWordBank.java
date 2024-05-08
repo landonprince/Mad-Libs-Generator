@@ -10,7 +10,7 @@ public class SpaceWordBank extends WordBank {
      * Constructor for SpaceWordBank class.
      * Calls the superclass constructor to initialize the word bank.
      */
-    public SpaceWordBank() {
+    protected SpaceWordBank() {
         fillBank();
     }
 

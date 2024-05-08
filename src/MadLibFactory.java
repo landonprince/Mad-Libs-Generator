@@ -6,70 +6,100 @@ import java.util.ArrayList;
  * sentence count, and blank frequency
  */
 public class MadLibFactory {
-    private final String theme;
-    private final int sentenceCount;
+    private final String THEME;
+    private final int SENTENCE_COUNT;
+    private int maxSentenceLength;
     private final SentenceFactory sentenceFactory;
 
     /**
      * Constructor for MadLibFactory class.
      * Initializes the theme and sentence count, and creates a SentenceFactory instance.
-     * @param theme The theme for the Mad Lib.
-     * @param sentenceCount The number of sentences in the Mad Lib.
+     * @param theme          The theme for the Mad Lib.
+     * @param sentenceCount  The number of sentences in the Mad Lib.
      * @param blankFrequency The amount of blank spaces in the Mad Lib
      */
-    public MadLibFactory(String theme, int sentenceCount, double blankFrequency) {
-        this.theme = theme;
-        this.sentenceCount = sentenceCount;
+    protected MadLibFactory(String theme, int sentenceCount, double blankFrequency) {
+        this.THEME = theme;
+        this.SENTENCE_COUNT = sentenceCount;
+        this.maxSentenceLength = 0;
         this.sentenceFactory = new SentenceFactory(theme, blankFrequency);
     }
 
     /**
      * Generates a Mad Lib based on the provided theme and sentence count.
+     *
      * @return A list of strings representing the generated Mad Lib.
      */
-    public List<String> generateMadLib() {
+    protected List<String> generateMadLib() {
         WordBank wordBank;
-        if (theme.equalsIgnoreCase("space")) {
+        if (THEME.equalsIgnoreCase("space")) {
             wordBank = new SpaceWordBank();
-        } else if (theme.equalsIgnoreCase("western")) {
+        } else if (THEME.equalsIgnoreCase("western")) {
             wordBank = new WesternWordBank();
-        } else if (theme.equalsIgnoreCase("pirate")) {
+        } else if (THEME.equalsIgnoreCase("pirate")) {
             wordBank = new PirateWordBank();
         } else {
             wordBank = new WordBank();
         }
         List<String> madLib = new ArrayList<>();
-        for (int i = 0; i < sentenceCount; i++) {
-            StringBuilder sentence = sentenceFactory.buildSentence(wordBank);
-            madLib.add(sentence.toString());
-            if (i < sentenceCount - 1) {
+        for (int i = 0; i < SENTENCE_COUNT; i++) {
+            String sentence = sentenceFactory.buildSentence(wordBank);
+            if (sentence.length() > maxSentenceLength) {
+                maxSentenceLength = sentence.length();
+            }
+            madLib.add(sentence);
+            if (i < SENTENCE_COUNT - 1) {
                 madLib.add(" ");
             }
         }
         return madLib;
     }
-    public void printMadLib(List<String> madLib) {
-        int lineLength = 0;
-        int maxLength = 20;
-        for (String s : madLib) {
-            if (lineLength + s.length() > maxLength) {
-                System.out.println();
-                lineLength = 0;
-            }
-            System.out.print(s);
-            lineLength += s.length();
-        }
+    protected List<String> getWordTypes() {
+        return sentenceFactory.getWordTypes();
     }
-    public int countBlanks(List<String> madLib) {
-        int count = 0;
-        for (String sentence : madLib) {
-            for (int i = 0; i < sentence.length(); i++) {
-                if (sentence.charAt(i) == '[') {
-                    count++;
+    protected void printMadLib(List<String> madLib) {
+        int borderLength = maxSentenceLength + 4;
+        System.out.println();
+        String border = "+" + "-".repeat(borderLength - 2) + "+";
+        System.out.println(border);
+        String header = "Mad Lib";
+        System.out.println("| " + header + " ".repeat(
+                borderLength - header.length() - 4) + " |");
+        System.out.println(border);
+        for (String s : madLib) {
+            int start = 0;
+            while (start < s.length()) {
+                int end = Math.min(start + maxSentenceLength, s.length());
+                String part = s.substring(start, end);
+                System.out.println("| " + part + " ".repeat(
+                        maxSentenceLength - part.length()) + " |");
+                start += maxSentenceLength;
+            }
+        }
+        System.out.println(border + "\n");
+    }
+
+    protected List<String> fillBlanks(List<String> madLib, List<String> responses) {
+        int responseIndex = 0;
+        for (int i = 0; i < madLib.size(); i++) {
+            String sentence = madLib.get(i);
+            while (sentence.contains("[noun]") || sentence.contains("[verb]") ||
+                    sentence.contains("[adjective]") || sentence.contains("[adverb]")) {
+                if (sentence.contains("[noun]") && responseIndex < responses.size()) {
+                    sentence = sentence.replaceFirst("\\[noun]", responses.get(responseIndex++));
+                }
+                if (sentence.contains("[verb]") && responseIndex < responses.size()) {
+                    sentence = sentence.replaceFirst("\\[verb]", responses.get(responseIndex++));
+                }
+                if (sentence.contains("[adjective]") && responseIndex < responses.size()) {
+                    sentence = sentence.replaceFirst("\\[adjective]", responses.get(responseIndex++));
+                }
+                if (sentence.contains("[adverb]") && responseIndex < responses.size()) {
+                    sentence = sentence.replaceFirst("\\[adverb]", responses.get(responseIndex++));
                 }
             }
+            madLib.set(i, sentence);
         }
-        return count;
-        // instead just keep track of blank count in sentence factory, and add them all up here
+        return madLib;
     }
 }

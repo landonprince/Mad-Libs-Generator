@@ -10,7 +10,7 @@ public class WesternWordBank extends WordBank {
      * Constructor for WesternWordBank class.
      * Calls the superclass constructor to initialize the word bank.
      */
-    public WesternWordBank() {
+    protected WesternWordBank() {
         fillBank();
     }
 

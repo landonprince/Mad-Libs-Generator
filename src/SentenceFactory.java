@@ -12,6 +12,7 @@ public class SentenceFactory {
     private final String theme;
     private final double blankFrequency;
     private final List<String> templates = new ArrayList<>();
+    private final List<String> wordTypes = new ArrayList<>();
     private final Random random = new Random();
 
     /**
@@ -19,7 +20,7 @@ public class SentenceFactory {
      * Initializes the theme and builds templates.
      * @param theme The theme for the sentences.
      */
-    public SentenceFactory(String theme, double blankFrequency) {
+    protected SentenceFactory(String theme, double blankFrequency) {
         this.theme = theme;
         this.blankFrequency = blankFrequency;
         long seed = System.currentTimeMillis();
@@ -30,9 +31,9 @@ public class SentenceFactory {
     /**
      * Generates a sentence based on a provided word bank.
      * @param wordBank The word bank containing words for the sentence.
-     * @return A StringBuilder object representing the generated sentence.
+     * @return A String representing the generated sentence.
      */
-    public StringBuilder buildSentence(WordBank wordBank) {
+    protected String buildSentence(WordBank wordBank) {
         StringBuilder sentence = new StringBuilder();
         Collections.shuffle(templates, random);
         String template = templates.get(0);
@@ -41,49 +42,58 @@ public class SentenceFactory {
                 case '$' -> { // noun
                     if (random.nextDouble() < blankFrequency) {
                         sentence.append("[noun]");
+                        wordTypes.add("noun");
                     } else {
                         String noun = theme.equalsIgnoreCase("all") ?
-                                wordBank.getRandomNounAll() : wordBank.getRandomNoun();
+                                wordBank.getRandomNounFromAny() : wordBank.getRandomNoun();
                         sentence.append(noun);
                     }
                 }
                 case '#' -> { // verb
                     if (random.nextDouble() < blankFrequency) {
                         sentence.append("[verb]");
+                        wordTypes.add("verb");
+
                     } else {
                         String verb = theme.equalsIgnoreCase("all") ?
-                                wordBank.getRandomVerbAll() : wordBank.getRandomVerb();
+                                wordBank.getRandomVerbFromAny() : wordBank.getRandomVerb();
                         sentence.append(verb);
                     }
                 }
                 case '@' -> { // adjective
                     if (random.nextDouble() < blankFrequency) {
                         sentence.append("[adjective]");
+                        wordTypes.add("adjective");
+
                     } else {
                         String adjective = theme.equalsIgnoreCase("all") ?
-                                wordBank.getRandomAdjectiveAll() : wordBank.getRandomAdjective();
+                                wordBank.getRandomAdjectiveFromAny() : wordBank.getRandomAdjective();
                         sentence.append(adjective);
                     }
                 }
                 case '%' -> { // adverb
                     if (random.nextDouble() < blankFrequency) {
                         sentence.append("[adverb]");
+                        wordTypes.add("adverb");
                     } else {
                         String adverb = theme.equalsIgnoreCase("all") ?
-                                wordBank.getRandomAdverbAll() : wordBank.getRandomAdverb();
+                                wordBank.getRandomAdverbFromAny() : wordBank.getRandomAdverb();
                         sentence.append(adverb);
                     }
                 }
                 default -> sentence.append(symbol);
             }
         }
-        return sentence;
+        return sentence.toString();
+    }
+    protected List<String> getWordTypes() {
+        return wordTypes;
     }
 
     /**
      * Builds sentence templates.
      */
-    public void buildTemplates() {
+    protected void buildTemplates() {
         templates.addAll(Arrays.asList(
                 "The $ # %.", "It is @ to # a $.", "She # the $ %.", "He was so @, he # the $.", "I # the @ $.",
                 "You are very @, you # the $.", "They # the $ %.", "We # the $ on the @ day.",

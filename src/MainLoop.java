@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 
@@ -6,6 +7,8 @@ import java.util.List;
  * It includes methods for starting the game, handling user input, and generating stories.
  */
 public class MainLoop {
+    private static final int MAX_SENTENCES = 25;
+    private static final int MIN_SENTENCES = 1;
     private static MadLibFactory madLibFactory;
 
     /**
@@ -14,8 +17,6 @@ public class MainLoop {
      * @param args Command-line arguments (not used).
      */
     public static void main(String[] args) {
-        System.out.println("-- Mad Libs (Java Edition) --");
-        System.out.println("     By: Landon Prince\n");
         startLauncher();
     }
 
@@ -24,6 +25,8 @@ public class MainLoop {
      * If the user chooses to play, it starts the game.
      */
     private static void startLauncher() {
+        System.out.println("\n-- Mad Libs (Java Edition) --");
+        System.out.println("     By: Landon Prince\n");
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.println("Enter '1' or '2'");
@@ -31,15 +34,17 @@ public class MainLoop {
                         1. Play
                         2. Quit""");
                 String choice = scanner.nextLine();
-                if (choice.equalsIgnoreCase("1")) {
-                    loadingText(1, "\nStarting game");
-                    startGame(scanner);
-                    break;
-                } else if (choice.equalsIgnoreCase("2")) {
-                    loadingText(1, "\nClosing game");
-                    break;
-                } else {
-                    System.out.println("\nInvalid choice. Please try again.\n");
+                switch (choice) {
+                    case "1" -> {
+                        loadingText(1, "\nStarting game");
+                        startGame(scanner);
+                        return;
+                    }
+                    case "2" -> {
+                        loadingText(1, "\nClosing game");
+                        return;
+                    }
+                    default -> System.out.println("\nInvalid choice. Please try again.\n");
                 }
             }
         }
@@ -68,8 +73,7 @@ public class MainLoop {
                 break;
             } else if (choice.equalsIgnoreCase("2")) {
                 System.out.println("\nOkay, maybe next time!\n");
-                startLauncher();
-                break;
+                return;
             } else {
                 System.out.println("\nInvalid choice. Please try again.\n");
             }
@@ -90,21 +94,17 @@ public class MainLoop {
                 (theme.equalsIgnoreCase("all") ? "an all theme Mad Lib" :
                         "a " + theme.toLowerCase() + " themed Mad Lib") +
                 "\nwith " + sentenceCount + " sentences ");
-        if (blankFrequency == 0.0) {
-            System.out.println("and no blank spaces.\n");
-        } else if (blankFrequency == 0.1) {
+        if (blankFrequency == 0.1) {
             System.out.println("and few blank spaces.\n");
         } else if (blankFrequency == 0.25) {
             System.out.println("and some blank spaces.\n");
-        } else if (blankFrequency == 0.5) {
-            System.out.println("and many blank spaces.\n");
         } else {
-            System.out.println("and all blank spaces.\n");
+            System.out.println("and many blank spaces.\n");
         }
-        loadingText(5, "Generating Mad Lib template");
+        loadingText(3, "Generating Mad Lib template");
         madLibFactory = new MadLibFactory(theme, sentenceCount, blankFrequency);
         List<String> madLib = madLibFactory.generateMadLib();
-        System.out.println("Mad Lib successfully generated. Woo-hoo!\n");
+        System.out.println("Mad Lib template successfully generated!\n");
         while (true) {
             System.out.println("Would you like to see the Mad Lib " +
                     "before filling in the blank spaces?");
@@ -114,23 +114,72 @@ public class MainLoop {
             String choice = scanner.nextLine();
             if (choice.equalsIgnoreCase("1")) {
                 madLibFactory.printMadLib(madLib);
+                System.out.print("Looks good! ");
                 break;
             } else if (choice.equalsIgnoreCase("2")) {
+                System.out.print("\nOkay! ");
                 break;
             } else {
                 System.out.println("\nInvalid choice. Please try again.\n");
             }
         }
-        fillBlanks(madLib);
+        List<String> responses = getResponses(scanner);
+        System.out.println("""
+
+                Great picks! I will now insert your words into the Mad Lib template!
+                """);
+        loadingText(3, "Completing Mad Lib");
+        List<String> filledMadLib = madLibFactory.fillBlanks(madLib, responses);
+        System.out.println("Mad Lib successfully completed!\n");
+        while (true) {
+            System.out.println("Enter '1' to display the full Mad Lib");
+            System.out.println("1. Display results!");
+            String choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("1")) {
+                madLibFactory.printMadLib(filledMadLib);
+                break;
+            } else {
+                System.out.println("\nInvalid choice. Please try again.\n");
+            }
+        }
+        System.out.println("Thank you for generating a Mad Lib!\n");
+        while (true) {
+            System.out.println("Enter '1' to return to menu");
+            System.out.println("1. Return to menu");
+            String choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("1")) {
+                startLauncher();
+                break;
+            } else {
+                System.out.println("\nInvalid choice. Please try again.\n");
+            }
+        }
     }
 
     /**
      * Fills the blank spaces in the Mad Lib with user input.
-     * @param madLib Mad Lib containing blank spaces
+     * @param scanner Scanner object for user input.
      */
-    private static void fillBlanks(List<String> madLib) {
-        int numBlanks = madLibFactory.countBlanks(madLib);
-        System.out.println(numBlanks);
+    private static List<String> getResponses(Scanner scanner) {
+        int count = 0;
+        List<String> responses = new ArrayList<>();
+        List<String> wordTypes = madLibFactory.getWordTypes();
+        int numBlanks = wordTypes.size();
+        System.out.println("I will now ask you to fill in " + numBlanks + " blank spaces " +
+                "to complete the story.");
+        for (String type : wordTypes) {
+            while (true) {
+                System.out.print("\n(" + count + "/" + numBlanks + ") ");
+                System.out.print("Please provide a [" + type.toLowerCase() + "]: ");
+                String choice = scanner.nextLine().trim();
+                if (!choice.isEmpty()) {
+                    responses.add(choice);
+                    count++;
+                    break;
+                }
+            }
+        }
+        return responses;
     }
 
     /**
@@ -145,17 +194,20 @@ public class MainLoop {
         System.out.print("Firstly, ");
         while (true) {
             System.out.println("How long would you like the Mad Lib to be?");
-            System.out.print("Enter number of sentences (1 - 50): ");
+            System.out.print("Enter number of sentences (" + MIN_SENTENCES +
+                    " - " + MAX_SENTENCES + "): ");
             String choice = scanner.nextLine();
             if (isInteger(choice)) {
                 sentenceCount = Integer.parseInt(choice);
-                if (sentenceCount > 50 || sentenceCount < 1) {
-                    System.out.println("\nMust be between 1 and 50. Please try again.\n");
+                if (sentenceCount > MAX_SENTENCES || sentenceCount < MIN_SENTENCES) {
+                    System.out.println("\nMust be between " + MIN_SENTENCES + " and " +
+                            MAX_SENTENCES + ". Please try again.\n");
                 } else {
                     break;
                 }
             } else {
-                System.out.println("\nMust be an integer between 1 and 50. Please try again.\n");
+                System.out.println("\nMust be an integer between " + MIN_SENTENCES +
+                        " and " + MAX_SENTENCES + ". Please try again.\n");
             }
         }
         return sentenceCount;
@@ -172,27 +224,19 @@ public class MainLoop {
         while (true) {
             System.out.println("How many blank spaces would you like in the Mad Lib?");
             System.out.println("""
-                    1. No blank spaces
-                    2. Few blank spaces
-                    3. Some blank spaces
-                    4. Many blank spaces
-                    5. All blank spaces""");
+                    1. Few blank spaces
+                    2. Some blank spaces
+                    3. Many blank spaces""");
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1" -> {
-                    return 0.0;
-                }
-                case "2" -> {
                     return 0.1;
                 }
-                case "3" -> {
+                case "2" -> {
                     return 0.25;
                 }
-                case "4" -> {
+                case "3" -> {
                     return 0.5;
-                }
-                case "5" -> {
-                    return 1.0;
                 }
                 default -> System.out.println("\nInvalid choice. Please try again.\n");
             }
@@ -208,7 +252,6 @@ public class MainLoop {
     private static String getTheme(Scanner scanner) {
         String theme;
         System.out.print("\nPerfect! Lastly, ");
-        label:
         while (true) {
             System.out.println("Which theme would you like the Mad Lib to be?");
             System.out.println("""
@@ -218,24 +261,25 @@ public class MainLoop {
                     4. All""");
             String choice = scanner.nextLine();
             switch (choice) {
-                case "1":
+                case "1" -> {
                     theme = "space";
-                    break label;
-                case "2":
+                    return theme;
+                }
+                case "2" -> {
                     theme = "western";
-                    break label;
-                case "3":
+                    return theme;
+                }
+                case "3" -> {
                     theme = "pirate";
-                    break label;
-                case "4":
+                    return theme;
+                }
+                case "4" -> {
                     theme = "all";
-                    break label;
-                default:
-                    System.out.println("\nTheme not found. Please try again.\n");
-                    break;
+                    return theme;
+                }
+                default -> System.out.println("\nTheme not found. Please try again.\n");
             }
         }
-        return theme;
     }
 
     /**

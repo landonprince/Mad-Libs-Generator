@@ -10,7 +10,7 @@ public class PirateWordBank extends WordBank {
      * Constructor for PirateWordBank class.
      * Calls the superclass constructor to initialize the word bank.
      */
-    public PirateWordBank() {
+    protected PirateWordBank() {
         fillBank();
     }
     /**

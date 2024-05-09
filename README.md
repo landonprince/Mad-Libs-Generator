@@ -41,4 +41,3 @@ Pirate themed Mad Lib with 5 sentences and some blank spaces
 - Inheritance
 - Dynamic binding & polymorphism
 - Inversion of control
-- Modularity & flexibility

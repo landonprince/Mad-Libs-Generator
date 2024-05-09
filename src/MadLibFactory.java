@@ -42,6 +42,7 @@ public class MadLibFactory {
         } else {
             wordBank = new WordBank();
         }
+
         List<String> madLib = new ArrayList<>();
         for (int i = 0; i < SENTENCE_COUNT; i++) {
             String sentence = sentenceFactory.buildSentence(wordBank);

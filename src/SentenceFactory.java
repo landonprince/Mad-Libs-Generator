@@ -39,7 +39,8 @@ public class SentenceFactory {
     protected String buildSentence(WordBank wordBank) {
         StringBuilder sentence = new StringBuilder();
         Collections.shuffle(templates, random);
-        String template = templates.get(0);
+        String template = templates.getFirst();
+
         for (char symbol : template.toCharArray()) {
             switch (symbol) {
                 case '$' -> { // noun
@@ -89,6 +90,11 @@ public class SentenceFactory {
         }
         return sentence.toString();
     }
+
+    /**
+     * Returns a list of the blank space word types from a sentence.
+     * @return A list of word types (noun/ver/adjective/adverb).
+     */
     protected List<String> getWordTypes() {
         return wordTypes;
     }

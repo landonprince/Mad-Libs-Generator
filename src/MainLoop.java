@@ -30,6 +30,7 @@ public class MainLoop {
         System.out.println("\n-- Mad Libs (Java Edition) --");
         System.out.println("     By: Landon Prince\n");
         try (Scanner scanner = new Scanner(System.in)) {
+
             while (true) {
                 System.out.println("Enter '1' or '2'");
                 System.out.println("""
@@ -64,6 +65,7 @@ public class MainLoop {
                 I'll generate a MadLib template based on your specifications,
                 and you'll fill in the blank spaces to make a wacky tale!
                 """);
+
         while (true) {
             System.out.println("Are you ready to make a Mad Lib?");
             System.out.println("""
@@ -91,6 +93,7 @@ public class MainLoop {
         int sentenceCount = getSentenceCount(scanner);
         double blankFrequency = getBlankFrequency(scanner);
         String theme = getTheme(scanner);
+
         System.out.print("\nGreat choices! ");
         System.out.print("I will now create " +
                 (theme.equalsIgnoreCase("all") ? "an all theme Mad Lib" :
@@ -103,10 +106,12 @@ public class MainLoop {
         } else {
             System.out.println("and many blank spaces.\n");
         }
+
         loadingText(3, "Generating Mad Lib template");
         madLibFactory = new MadLibFactory(theme, sentenceCount, blankFrequency);
         List<String> madLib = madLibFactory.generateMadLib();
         System.out.println("Mad Lib template successfully generated!\n");
+
         while (true) {
             System.out.println("Would you like to see the Mad Lib " +
                     "before filling in the blank spaces?");
@@ -125,6 +130,7 @@ public class MainLoop {
                 System.out.println("\nInvalid choice. Please try again.\n");
             }
         }
+
         List<String> responses = getResponses(scanner);
         System.out.println("""
 
@@ -133,6 +139,7 @@ public class MainLoop {
         loadingText(3, "Completing Mad Lib");
         List<String> filledMadLib = madLibFactory.fillBlanks(madLib, responses);
         System.out.println("Mad Lib successfully completed!\n");
+
         while (true) {
             System.out.println("Enter '1' to display the full Mad Lib");
             System.out.println("1. Display results!");
@@ -145,6 +152,7 @@ public class MainLoop {
             }
         }
         System.out.println("Thank you for generating a Mad Lib!\n");
+
         while (true) {
             System.out.println("Enter '1' to return to menu");
             System.out.println("1. Return to menu");
@@ -169,6 +177,7 @@ public class MainLoop {
         int numBlanks = wordTypes.size();
         System.out.println("I will now ask you to fill in " + numBlanks + " blank spaces " +
                 "to complete the story.");
+
         for (String type : wordTypes) {
             while (true) {
                 System.out.print("\n(" + count + "/" + numBlanks + ") ");
@@ -194,6 +203,7 @@ public class MainLoop {
         int sentenceCount;
         System.out.println("\nFantastic! To begin, I must ask some questions...\n");
         System.out.print("Firstly, ");
+
         while (true) {
             System.out.println("How long would you like the Mad Lib to be?");
             System.out.print("Enter number of sentences (" + MIN_SENTENCES +
@@ -223,6 +233,7 @@ public class MainLoop {
      */
     private static double getBlankFrequency(Scanner scanner) {
         System.out.print("\nNice! Next, ");
+
         while (true) {
             System.out.println("How many blank spaces would you like in the Mad Lib?");
             System.out.println("""
@@ -254,6 +265,7 @@ public class MainLoop {
     private static String getTheme(Scanner scanner) {
         String theme;
         System.out.print("\nPerfect! Lastly, ");
+
         while (true) {
             System.out.println("Which theme would you like the Mad Lib to be?");
             System.out.println("""
@@ -310,7 +322,7 @@ public class MainLoop {
                 Thread.sleep(seconds * 250L);
                 System.out.print(".");
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                return;
             }
         }
         System.out.println("\n");

@@ -1,4 +1,4 @@
-# Mad Lib Generator
+# Mad Libs Generator
 **By: Landon Prince (5/4/2024)**
 
 Welcome! This program allows the player to generate their own _custom Mad Lib templates_, and then fill in the blank spaces to create fun stories. 

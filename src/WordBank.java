@@ -38,7 +38,7 @@ public class WordBank {
      * @return List of nouns.
      */
     protected List<String> getNouns() {
-        return WORDS.get(0);
+        return WORDS.getFirst();
     }
 
     /**

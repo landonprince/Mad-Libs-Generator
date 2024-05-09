@@ -37,7 +37,7 @@ Pirate themed Mad Lib with 5 sentences and some blank spaces
 - Advanced string manipulation
 - Factory design pattern                      
 - Input validation & exception handling
-- Lists & StringBuilder objects
+- Java Standard Library 
 - Inheritance
 - Dynamic binding & polymorphism
 - Inversion of control
